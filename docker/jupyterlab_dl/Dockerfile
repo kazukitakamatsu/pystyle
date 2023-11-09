@@ -1,9 +1,8 @@
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
-LABEL maintainer "pystyle"
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
 ENV LC_ALL C.UTF-8
 ENV PATH "/root/.pyenv/bin:${PATH}"
-ARG PYTHON_VERSION="3.9.7"
+ARG PYTHON_VERSION="3.11.6"
 
 # Install requirements
 RUN apt-get update && \
@@ -48,7 +47,7 @@ WORKDIR /notebook
 COPY requirements.txt .
 RUN eval "$(pyenv init --path)" && \
     cat requirements.txt | xargs -n 1 pip install -U --no-cache-dir && \
-    jupyter notebook --generate-config -y && \
+    jupyter lab --generate-config -y && \
     # fix issue about black https://github.com/psf/black/issues/1143
     mkdir -p /root/.cache/black/21.9b0/ && \
     rm requirements.txt
